@@ -1,10 +1,16 @@
 import './App.css'
+import BarChart from './components/barChartUI'
 
 function App() {
  return (
-    <div className="App">
-      <h1>Hello, React!</h1>
-    </div>
+    <main>
+      <div className='barchat-card'>
+        <h2 className='cardTitle'>cantidad de productos por categoría</h2>
+        <div className='chart-Container'>
+          <BarChart/>
+        </div>
+      </div>
+    </main>
   )
 }
 
