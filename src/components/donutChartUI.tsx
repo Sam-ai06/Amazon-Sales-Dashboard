@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Papa from 'papaparse'
 import { PieChart, pieClasses } from "@mui/x-charts/PieChart";
 
 interface RatingData{
@@ -12,21 +11,18 @@ export default function DonutChart(){
 
     //useEffect: ejecuta codigo cada vez que un componente se renderiza
     useEffect(() =>{
-        fetch('/public/data/rango_ratings.csv')
+        fetch('/data_extracted/rango_ratings.json')
         .then((response) => {
             if (!response.ok){
-                throw new Error("Error al cargar el csv. Revisa la ruta de acceso a datos")
+                throw new Error("Error al cargar el JSON. Revisa la ruta de acceso a datos")
             }
-            return response.text();
+            return response.json() as Promise<RatingData[]>;
         })
-        .then((csv) =>{
-            const result = Papa.parse<RatingData>(csv,{
-                header: true,
-                skipEmptyLines: true,
-                dynamicTyping: true,
-            });
-
-            setRatings(result.data)
+        .then((data) =>{
+            setRatings(data.map((item) => ({
+                ...item,
+                count: Number(item.count),
+            })));
         })
         .catch(console.error)
         
