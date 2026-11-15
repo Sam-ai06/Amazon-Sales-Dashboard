@@ -1,35 +1,28 @@
 import { useState, useEffect } from "react";
-import Papa from 'papaparse'
 import { BarChart as MuiBarChart} from '@mui/x-charts/BarChart';
 
-
-
-interface CSVRow{
+interface BarItems{
     category: string
     count: number
 }
 
 export default function BarChart(){
-    const [counts, setCounts] = useState<CSVRow[]>([])
+    const [counts, setCounts] = useState<BarItems[]>([])
 
     useEffect(() => {
-        fetch('/public/data_extracted/products_per_category_barChart.csv')
+        fetch('/public/data_extracted/products_per_category_barChart.json')
         .then((response) =>{
             if(!response.ok){
-                throw new Error("Error al cargar el csv. Revisa la ruta e intentalo de nuevo.")
+                throw new Error("Error al cargar el JSON. Revisa la ruta e intentalo de nuevo.")
             }
-            return response.text();
+            return response.json() as Promise<BarItems[]>;
         })
-        .then((csv) =>{
-            const result = Papa.parse<CSVRow>(csv,{
-                header: true,
-                skipEmptyLines: true,
-                dynamicTyping: true,
-            });
-            setCounts(result.data)
-
-            
-        })
+        .then((data) =>{
+                    setCounts(data.map((item) => ({
+                        ...item,
+                        count: Number(item.count),
+                    })));
+                })
         .catch(console.error)
 
     }, [])
