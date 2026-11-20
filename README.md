@@ -1,75 +1,78 @@
-# React + TypeScript + Vite
+# Amazon Sales Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![React](https://img.shields.io/badge/React-19-149ECA?logo=react&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white) ![Python](https://img.shields.io/badge/Python-Data%20Analysis-3776AB?logo=python&logoColor=white) ![Status](https://img.shields.io/badge/Estado-En%20desarrollo-yellow)
 
-Currently, two official plugins are available:
+Dashboard web en desarrollo para explorar información de productos de Amazon mediante indicadores, tablas y visualizaciones. El proyecto combina el análisis y la transformación de datos con **Python** y la construcción de una interfaz con **React y TypeScript**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+> **Estado actual:** la rama `main` contiene la base del proyecto y un cuaderno de exploración de datos. La pantalla principal todavía muestra un ejemplo de React; las visualizaciones se están trabajando en ramas separadas. Por tanto, el dashboard aún no está integrado.
 
-## React Compiler
+## Datos
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+El archivo `data/amazon.csv` reúne información de productos, categorías, precios originales y con descuento, porcentajes de descuento, calificaciones, cantidad de valoraciones y reseñas. El análisis inicial del notebook registra **1.465 filas y 16 columnas**.
 
-## Expanding the ESLint configuration
+**Importante:** este dataset no incluye cantidades vendidas ni ingresos por transacción. En consecuencia, el dashboard permite estudiar el catálogo y sus valoraciones, pero no calcular ventas reales ni identificar productos más vendidos.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Funcionalidades en desarrollo
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Indicadores KPI:** componentes previstos para resumir métricas del conjunto de datos.
+- **Gráfico de barras:** conteo de productos por categorías; desarrollo en la rama [`barchartUI`](../../tree/barchartUI).
+- **Gráfico de dona:** distribución de productos por rangos de calificación; desarrollo en [`DonutChartUI`](../../tree/DonutChartUI).
+- **Tablas de productos y mejor valorados:** estructura de componentes en preparación.
+- **Barra de navegación:** trabajo separado en [`navbarUI`](../../tree/navbarUI).
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Las ramas de barras y dona contienen notebooks que transforman los datos de CSV a JSON para las visualizaciones. **Esas exportaciones aún no forman parte de `main`.**
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Tecnologías
 
+- **Frontend:** React, TypeScript, Vite, HTML y CSS.
+- **Análisis de datos:** Python, pandas y Jupyter Notebook.
+- **Visualización:** componentes con MUI X Charts en ramas de desarrollo (pendientes de integración y dependencias en `main`).
+- **Herramientas:** ESLint, npm y Git/GitHub.
+
+## Estructura principal
+
+```text
+Amazon-Sales-Dashboard/
+├── data/
+│   └── amazon.csv
+├── public/
+│   └── data_extracted/
+├── script/
+│   └── main.ipynb
+├── src/
+│   ├── components/
+│   │   ├── KPICardUI.tsx
+│   │   ├── barChartUI.tsx
+│   │   ├── bestRatedProductsTableUI.tsx
+│   │   ├── donutChartUI.tsx
+│   │   ├── navbarUI.tsx
+│   │   └── productsTableUI.tsx
+│   └── App.tsx
+└── package.json
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+## Ejecutar localmente
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Requiere Node.js y npm compatibles con la versión de Vite instalada.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+git clone https://github.com/Sam-ai06/Amazon-Sales-Dashboard.git
+cd Amazon-Sales-Dashboard
+npm install
+npm run dev
 ```
+
+Abre la dirección local que muestre Vite. En `main` verás la pantalla inicial, **no todavía el dashboard completo**.
+
+Para explorar el análisis de datos, abre `script/main.ipynb` en Jupyter con las librerías de Python necesarias.
+
+## Próximos pasos
+
+1. Integrar los componentes y sus archivos JSON en `main`.
+2. Incorporar y configurar las dependencias de gráficos necesarias.
+3. Conectar los indicadores y las tablas a datos procesados.
+4. Mejorar la experiencia visual y documentar el resultado con capturas.
+
+---
+
+Proyecto académico de análisis de datos y desarrollo frontend de [Sam-ai06](https://github.com/Sam-ai06).
