@@ -75,4 +75,4 @@ Para explorar el análisis de datos, abre `script/main.ipynb` en Jupyter con las
 
 ---
 
-Proyecto académico de análisis de datos y desarrollo frontend de [Sam-ai06](https://github.com/Sam-ai06).
+Proyecto académico de análisis de datos y desarrollo frontend de [Sam-ai06](https://github.com/Sam-ai06) y [Mairrch](https://github.com/Mairrch)
