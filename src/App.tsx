@@ -1,10 +1,13 @@
 import './App.css'
+import KPICardUI from './components/KPICardUI'
 
 function App() {
- return (
-    <div className="App">
-      <h1>Hello, React!</h1>
-    </div>
+  return (
+    <main className="dashboard-container">
+      <div className="kpi-section">
+        <KPICardUI />
+      </div>
+    </main>
   )
 }
 
