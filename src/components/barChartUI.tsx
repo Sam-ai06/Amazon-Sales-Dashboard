@@ -10,7 +10,7 @@ export default function BarChart(){
     const [counts, setCounts] = useState<BarItems[]>([])
 
     useEffect(() => {
-        fetch('/public/data_extracted/products_per_category_barChart.json')
+        fetch('/data_extracted/products_per_category_barChart.json')
         .then((response) =>{
             if(!response.ok){
                 throw new Error("Error al cargar el JSON. Revisa la ruta e intentalo de nuevo.")
@@ -57,9 +57,8 @@ export default function BarChart(){
                     barLabel: 'value', barLabelPlacement: 'outside'
                 },
             ]}
-            width = {800}
-            height = {500}
-            margin = {{bottom: -3}}
+            height={300}
+            margin={{ bottom: 8, left: 45, right: 20, top: 20 }}
             grid={{ horizontal: true }}
             borderRadius={5}
 
