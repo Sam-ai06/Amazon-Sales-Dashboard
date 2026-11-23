@@ -7,7 +7,7 @@ function App() {
       <div className='barchat-card'>
         <h2 className='cardTitle'>cantidad de productos por categoría</h2>
         <div className='chart-Container'>
-          <BarChart/>
+            
         </div>
       </div>
     </main>
