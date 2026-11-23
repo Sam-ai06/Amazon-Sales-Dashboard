@@ -36,11 +36,11 @@ export default function App() {
             {/* Fila superior: KPIs + BarChart (Izquierda) y DonutChart (Derecha) */}
             <div className="dashboard-top-row">
               <div className="dashboard-top-left">
-                {/* 3 Tarjetas KPI implementadas según el layout de la imagen */}
+                {/* 3 Tarjetas KPI cargadas dinámicamente mediante su parámetro url */}
                 <div className="kpi-cards-row">
-                  <KPICardUI title="Total de productos" count={1465} />
-                  <KPICardUI title="Rating promedio" count="4.09/5" />
-                  <KPICardUI title="Descuento promedio" count={1465} />
+                  <KPICardUI url="/data_extracted/total_products.json" />
+                  <KPICardUI url="/data_extracted/average_rating.json" />
+                  <KPICardUI url="/data_extracted/average_discount.json" />
                 </div>
 
                 {/* Contenedor para el gráfico de barras */}
