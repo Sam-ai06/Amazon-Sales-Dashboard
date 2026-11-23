@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import NavbarUI from './components/navbarUI';
 import KPICardUI from './components/KPICardUI';
+import DonutChartUI from './components/donutChartUI';
 import './App.css';
 
 export default function App() {
@@ -50,7 +51,8 @@ export default function App() {
               {/* Contenedor para el gráfico de dona */}
               <div className="dashboard-top-right">
                 <div className="donutchart-slot-placeholder">
-                  <h3 className="section-slot-title">Proporción de rating de productos</h3>
+                  <h3 className='donutChartTitle'>Proporción de rating de productos</h3>
+                  <DonutChartUI/>
                 </div>
               </div>
             </div>
