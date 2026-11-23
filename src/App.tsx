@@ -40,7 +40,7 @@ export default function App() {
                 <div className="kpi-cards-row">
                   <KPICardUI title="Total de productos" count={1465} />
                   <KPICardUI title="Rating promedio" count="4.09/5" />
-                  <KPICardUI title="Total de productos" count={1465} />
+                  <KPICardUI title="Descuento promedio" count={1465} />
                 </div>
 
                 {/* Contenedor para el gráfico de barras */}
