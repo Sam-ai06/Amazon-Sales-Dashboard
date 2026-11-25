@@ -1,0 +1,84 @@
+.products-table {
+  --pt-header-from: #3b3e63;
+  --pt-header-to: #2c2f4d;
+  --pt-divider: #eceef2;
+  --pt-text: #14161f;
+  --pt-inset: 18px;
+
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgb(15 18 32 / 0.08);
+  overflow: hidden;
+  text-align: left;
+}
+
+.products-table__table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.products-table__col-id { width: 112px; }
+.products-table__col-category { width: 130px; }
+.products-table__col-money { width: 118px; }
+.products-table__col-discount { width: 112px; }
+.products-table__col-rating { width: 80px; }
+
+/* Encabezado */
+.products-table__table thead tr {
+  background: linear-gradient(180deg, var(--pt-header-from), var(--pt-header-to));
+}
+.products-table__table th {
+  height: 62px;
+  padding: 0 12px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: left;
+}
+.products-table__table th:first-child { padding-left: 30px; }
+.products-table__table th:last-child { padding-right: 30px; }
+
+/* Celdas */
+.products-table__table td {
+  height: 45px;
+  padding: 0 12px;
+  vertical-align: middle;
+  color: var(--pt-text);
+  font-size: 12px;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+  /* línea divisoria inferior con margen a los lados */
+  background: linear-gradient(var(--pt-divider), var(--pt-divider)) no-repeat bottom / 100% 1px;
+}
+.products-table__table td:first-child {
+  padding-left: 30px;
+  background-size: calc(100% - var(--pt-inset)) 1px;
+  background-position: right bottom;
+}
+.products-table__table td:last-child {
+  padding-right: 30px;
+  background-size: calc(100% - var(--pt-inset)) 1px;
+  background-position: left bottom;
+}
+.products-table__table tbody tr:last-child td { background-image: none; }
+.products-table__table tbody tr:hover { background-color: #f8f9fc; }
+
+.products-table__id { white-space: nowrap; }
+.products-table__strong { font-weight: 600; }
+
+/* Una sola línea con "…" (los nombres del dataset son larguísimos) */
+.products-table__ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.products-table__table .products-table__num { text-align: right; }
+
+.products-table__empty {
+  height: 120px !important;
+  color: #7b8091;
+  text-align: center !important;
+}
