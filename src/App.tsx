@@ -1,35 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import NavbarUI from './components/navbarUI';
 import KPICardUI from './components/KPICardUI';
 import DonutChartUI from './components/donutChartUI';
 import BarChartUI from './components/barChartUI';
-import { fetchDashboardData, type DashboardData } from './types/dashboardData';
+import useFetchData from './hooks/useFetchData';
 import './App.css';
+
+const FIREBASE_DASHBOARD_PATH = '/';
 
 export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<string>('Todas');
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { data: dashboardData, isLoading } = useFetchData(FIREBASE_DASHBOARD_PATH);
   const sampleCategories = ['electronicos', 'casa', 'cocina', 'computadoras'];
-
-  useEffect(() => {
-    let isMounted = true;
-    fetchDashboardData()
-      .then((data) => {
-        if (!isMounted) return;
-        setDashboardData(data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        if (!isMounted) return;
-        console.error(error);
-        setIsLoading(false);
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
 
   return (
     <div className="dashboard-app">

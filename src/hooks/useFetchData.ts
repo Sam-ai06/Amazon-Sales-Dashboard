@@ -4,6 +4,7 @@ import type { DashboardData } from "../types/dashboardData";
 
 export default function useFetchData(info: string) {
     const [data, setData] = useState<DashboardData | null>(null);
+    const [loadedInfo, setLoadedInfo] = useState<string | null>(null);
 
     useEffect(() => {
         if (!info) {
@@ -20,6 +21,10 @@ export default function useFetchData(info: string) {
                 }
             } catch (error) {
                 console.error("Error al obtener los datos de Firebase:", error);
+            } finally {
+                if (isMounted) {
+                    setLoadedInfo(info);
+                }
             }
         }
 
@@ -30,5 +35,7 @@ export default function useFetchData(info: string) {
         };
     }, [info]);
 
-    return { data };
+    const isLoading = Boolean(info) && loadedInfo !== info;
+
+    return { data, isLoading };
 }
