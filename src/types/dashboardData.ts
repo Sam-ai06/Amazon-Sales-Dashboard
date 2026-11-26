@@ -23,7 +23,7 @@ export interface DashboardData {
     donutChart: DonutChartItem[];
 }
 
-export const DASHBOARD_DATA_URL = '/data_extracted/dashboard_data.json';
+export const DASHBOARD_DATA_URL = `${import.meta.env.BASE_URL}data_extracted/dashboard_data.json`;
 
 export async function fetchDashboardData(url: string = DASHBOARD_DATA_URL): Promise<DashboardData> {
     const response = await fetch(url);

@@ -52,7 +52,7 @@ export default function NavbarUI({
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <Box
             component="img"
-            src="/amazon-analytics-logo.svg"
+            src={`${import.meta.env.BASE_URL}amazon-analytics-logo.svg`}
             alt="Amazon Analytics Logo"
             sx={{ height: 57, width: 'auto' }}
           />
