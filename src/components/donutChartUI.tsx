@@ -1,32 +1,43 @@
 import { useState, useEffect } from "react";
 import { PieChart, pieClasses } from "@mui/x-charts/PieChart";
+import {
+    DASHBOARD_DATA_URL,
+    fetchDashboardData,
+    type DonutChartItem,
+} from "../types/dashboardData";
 
-interface RatingData{
-    rango_rating: string;
-    count: number;
+interface DonutChartProps {
+    data?: DonutChartItem[] | null;
+    url?: string;
 }
 
-export default function DonutChart(){
-    const [ratings, setRatings] = useState<RatingData[]>([]);
+export default function DonutChart({ data, url }: DonutChartProps = {}) {
+    const usesExternalData = data !== undefined;
+    const [fetchedRatings, setFetchedRatings] = useState<DonutChartItem[]>([]);
 
-    //useEffect: ejecuta codigo cada vez que un componente se renderiza
-    useEffect(() =>{
-        fetch('/data_extracted/rango_ratings.json')
-        .then((response) => {
-            if (!response.ok){
-                throw new Error("Error al cargar el JSON. Revisa la ruta de acceso a datos")
-            }
-            return response.json() as Promise<RatingData[]>;
-        })
-        .then((data) =>{
-            setRatings(data.map((item) => ({
-                ...item,
-                count: Number(item.count),
-            })));
-        })
-        .catch(console.error)
-        
-    }, []); //un array vacío significa que se ejecuta una sola vez al montar el componente
+    // Cargar la sección donutChart del JSON compartido si no llega vía props
+    useEffect(() => {
+        if (usesExternalData) {
+            return;
+        }
+
+        let isMounted = true;
+        fetchDashboardData(url ?? DASHBOARD_DATA_URL)
+            .then((json) => {
+                if (!isMounted) return;
+                setFetchedRatings(json.donutChart ?? []);
+            })
+            .catch(console.error);
+
+        return () => {
+            isMounted = false;
+        };
+    }, [usesExternalData, url]);
+
+    const ratings = (usesExternalData ? (data ?? []) : fetchedRatings).map((item) => ({
+        ...item,
+        count: Number(item.count),
+    }));
     return (
         <PieChart
       series={[

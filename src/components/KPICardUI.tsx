@@ -1,13 +1,17 @@
 import { useState, useEffect } from "react";
+import {
+    DASHBOARD_DATA_URL,
+    type DashboardData,
+    type KPIData,
+    type KPIKey,
+} from "../types/dashboardData";
 
-export interface KPIData {
-    title?: string;
-    count?: number | string;
-    value?: number | string;
-    [key: string]: unknown;
-}
+export type { KPIData, KPIKey };
 
 export interface KPICardProps {
+    data?: KPIData | null;
+    kpiKey?: KPIKey;
+    isLoading?: boolean;
     url?: string;
     dataUrl?: string;
     title?: string;
@@ -16,7 +20,24 @@ export interface KPICardProps {
     formatter?: (value: number | string, item?: KPIData) => string;
 }
 
+function extractKpiItem(payload: unknown, kpiKey?: KPIKey): KPIData | null {
+    if (Array.isArray(payload) && payload.length > 0) {
+        return payload[0] as KPIData;
+    }
+    if (payload && typeof payload === "object") {
+        const record = payload as Partial<DashboardData>;
+        if (record.kpis && kpiKey && record.kpis[kpiKey]) {
+            return record.kpis[kpiKey];
+        }
+        return payload as KPIData;
+    }
+    return null;
+}
+
 export default function KPICardUI({
+    data,
+    kpiKey,
+    isLoading,
     url,
     dataUrl,
     title,
@@ -24,13 +45,14 @@ export default function KPICardUI({
     link,
     formatter,
 }: KPICardProps = {}) {
-    const fetchUrl = url || dataUrl;
-    const [kpiItem, setKpiItem] = useState<KPIData | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(Boolean(fetchUrl));
+    const usesExternalData = data !== undefined;
+    const fetchUrl = url || dataUrl || (kpiKey ? DASHBOARD_DATA_URL : undefined);
+    const [fetchedItem, setFetchedItem] = useState<KPIData | null>(null);
+    const [fetchLoading, setFetchLoading] = useState<boolean>(!usesExternalData && Boolean(fetchUrl));
 
-    // Cargar datos dinámicamente desde el URL provisto
+    // Cargar datos dinámicamente desde el JSON compartido cuando no se reciben vía props
     useEffect(() => {
-        if (!fetchUrl) {
+        if (usesExternalData || !fetchUrl) {
             return;
         }
 
@@ -49,27 +71,24 @@ export default function KPICardUI({
                 }
                 return response.json();
             })
-            .then((data: unknown) => {
+            .then((payload: unknown) => {
                 if (!isMounted) return;
-                let item: KPIData | null = null;
-                if (Array.isArray(data) && data.length > 0) {
-                    item = data[0] as KPIData;
-                } else if (data && typeof data === "object") {
-                    item = data as KPIData;
-                }
-                setKpiItem(item);
-                setIsLoading(false);
+                setFetchedItem(extractKpiItem(payload, kpiKey));
+                setFetchLoading(false);
             })
             .catch((err) => {
                 if (!isMounted) return;
                 console.error(err);
-                setIsLoading(false);
+                setFetchLoading(false);
             });
 
         return () => {
             isMounted = false;
         };
-    }, [fetchUrl]);
+    }, [usesExternalData, fetchUrl, kpiKey]);
+
+    const kpiItem = usesExternalData ? data : fetchedItem;
+    const loading = isLoading ?? (usesExternalData ? false : fetchLoading);
 
     // Resolver título: prop explícito -> título de la data -> fallback
     let displayTitle = title ?? kpiItem?.title ?? "Métrica";
@@ -100,12 +119,14 @@ export default function KPICardUI({
 
         // Si es métrica de rating (ej. "4.0965846..." -> "4.09/5")
         const isRating =
+            kpiKey === "averageRating" ||
             /rating/i.test(itemTitle) ||
             /rating/i.test(targetUrl) ||
             (num > 0 && num <= 5 && !Number.isInteger(num));
 
         // Si es métrica de porcentaje o descuento (ej. 47.6914... -> "47.7%")
         const isDiscount =
+            kpiKey === "averageDiscount" ||
             /descuento|discount|porcentaje|%/i.test(itemTitle) ||
             /discount|descuento/i.test(targetUrl);
 
@@ -160,7 +181,7 @@ export default function KPICardUI({
 
                 <div className="kpi-value-container">
                     <span className="kpi-value">
-                        {isLoading ? "..." : formattedValue}
+                        {loading ? "..." : formattedValue}
                     </span>
                 </div>
             </div>

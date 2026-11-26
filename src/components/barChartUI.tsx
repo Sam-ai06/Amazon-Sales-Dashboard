@@ -1,35 +1,46 @@
 import { useState, useEffect } from "react";
-import { BarChart as MuiBarChart} from '@mui/x-charts/BarChart';
+import { BarChart as MuiBarChart } from '@mui/x-charts/BarChart';
+import {
+    DASHBOARD_DATA_URL,
+    fetchDashboardData,
+    type BarChartItem,
+} from "../types/dashboardData";
 
-interface BarItems{
-    category: string
-    count: number
+interface BarChartProps {
+    data?: BarChartItem[] | null;
+    url?: string;
 }
 
-export default function BarChart(){
-    const [counts, setCounts] = useState<BarItems[]>([])
+export default function BarChart({ data, url }: BarChartProps = {}) {
+    const usesExternalData = data !== undefined;
+    const [fetchedCounts, setFetchedCounts] = useState<BarChartItem[]>([]);
 
     useEffect(() => {
-        fetch('/data_extracted/products_per_category_barChart.json')
-        .then((response) =>{
-            if(!response.ok){
-                throw new Error("Error al cargar el JSON. Revisa la ruta e intentalo de nuevo.")
-            }
-            return response.json() as Promise<BarItems[]>;
-        })
-        .then((data) =>{
-                    setCounts(data.map((item) => ({
-                        ...item,
-                        count: Number(item.count),
-                    })));
-                })
-        .catch(console.error)
+        if (usesExternalData) {
+            return;
+        }
 
-    }, [])
+        let isMounted = true;
+        fetchDashboardData(url ?? DASHBOARD_DATA_URL)
+            .then((json) => {
+                if (!isMounted) return;
+                setFetchedCounts(json.barChart ?? []);
+            })
+            .catch(console.error);
 
-      const topCategories = [...counts]
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 6);
+        return () => {
+            isMounted = false;
+        };
+    }, [usesExternalData, url]);
+
+    const counts = (usesExternalData ? (data ?? []) : fetchedCounts).map((item) => ({
+        ...item,
+        count: Number(item.count),
+    }));
+
+    const topCategories = [...counts]
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 6);
 
     return (
         <MuiBarChart 
