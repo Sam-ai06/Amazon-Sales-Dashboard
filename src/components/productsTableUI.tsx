@@ -29,6 +29,11 @@ const formatMoney = (n: number) => (Number.isFinite(n) ? `₹${n.toLocaleString(
 const formatPercent = (n: number) => (Number.isFinite(n) ? `${n}%` : '—')
 const formatRating = (n: number) => (Number.isFinite(n) ? n.toFixed(1) : '—')
 
+function shortProductName(name: string): string {
+  const shortened = name.split(/[,|(|)]/, 1)[0].trim()
+  return shortened.length > 60 ? `${shortened.slice(0, 59).trimEnd()}…` : shortened
+}
+
 interface ProductRow {
   id: string
   name: string
@@ -96,7 +101,7 @@ export default function ProductsTableUI({ rows, limit = 10 }: Props) {
               <tr key={p.id}>
                 <td className="products-table__id">{p.id}</td>
                 <td>
-                  <div className="products-table__ellipsis" title={p.name}>{p.name}</div>
+                  <div className="products-table__ellipsis" title={p.name}>{shortProductName(p.name)}</div>
                 </td>
                 <td>
                   <div className="products-table__ellipsis" title={p.category}>{p.category}</div>

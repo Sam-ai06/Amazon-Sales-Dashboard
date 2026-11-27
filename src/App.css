@@ -233,14 +233,14 @@ body {
   margin: 0;
 }
 
-.dashboard-bottom-row {
+.tables-row {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  grid-template-columns: minmax(0, 42fr) minmax(0, 58fr);
   gap: 20px;
 }
 
 @media (max-width: 1100px) {
-  .dashboard-bottom-row {
+  .tables-row {
     grid-template-columns: 1fr;
   }
 }

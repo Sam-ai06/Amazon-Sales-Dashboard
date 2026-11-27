@@ -33,6 +33,11 @@ const leafCategory = (path: string): string => path.split('|').at(-1) ?? path
 
 const formatReviews = (n: number) => n.toLocaleString('en-US')
 
+function shortProductName(name: string): string {
+  const shortened = name.split(/[,|(|)]/, 1)[0].trim()
+  return shortened.length > 60 ? `${shortened.slice(0, 59).trimEnd()}…` : shortened
+}
+
 function selectBestRated(rows: RawProductRow[], limit: number, minReviews: number): BestRatedProduct[] {
   const seen = new Set<string>()
   const products: BestRatedProduct[] = []
@@ -111,7 +116,7 @@ export default function BestRatedProductsTableUI({ rows, limit = 10, minReviews 
                   <Thumbnail src={p.imageUrl} alt={p.name} />
                 </td>
                 <td>
-                  <div className="best-rated__name" title={p.name}>{p.name}</div>
+                  <div className="best-rated__name" title={p.name}>{shortProductName(p.name)}</div>
                   <div className="best-rated__category">{p.category}</div>
                 </td>
                 <td className="best-rated__num best-rated__value">{p.rating.toFixed(1)}</td>

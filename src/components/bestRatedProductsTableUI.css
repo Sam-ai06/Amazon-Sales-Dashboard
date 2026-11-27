@@ -41,6 +41,7 @@
 .best-rated__table td {
   height: 51px;
   padding: 0 12px;
+  text-align: left;
   vertical-align: middle;
   color: var(--br-text);
   background: linear-gradient(var(--br-divider), var(--br-divider)) no-repeat bottom / 100% 1px;
