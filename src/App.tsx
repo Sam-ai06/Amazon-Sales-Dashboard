@@ -15,7 +15,7 @@ function App() {
     <div className="App">
       <ProductsTableUI rows={rows} />
     </div>
-  )
+  );
 }
 
 export default App
